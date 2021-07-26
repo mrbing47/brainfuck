@@ -1,0 +1,23 @@
+{
+  "name": "brainfuck",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bf.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrbing47/brainfuck.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrbing47/brainfuck/issues"
+  },
+  "homepage": "https://github.com/mrbing47/brainfuck#readme",
+  "dependencies": {
+    "chalk": "^4.1.1"
+  }
+}
