@@ -1,7 +1,10 @@
 const chalk = require("chalk");
 const index = chalk.bold.blue;
 const error = chalk.bold.red;
+
+// The number of char preceding and succeeding the error point of the program for better information in ERROR.
 const err_length = 5;
+
 class Stack {
 	constructor() {
 		this.stack = [];
@@ -20,6 +23,14 @@ class Stack {
 		return this.stack.length === 0 ? true : false;
 	}
 }
+
+/*
+    str: String = The Brainfuck code.
+    input: String (OPTIONAL) = The input for the code to take.
+    init: Array (OPTIONAL) = The value of initial bits of the tap.
+    size: Integer (OPTIONAL) = The size of the tape.
+    wrap: Boolean (OPTIONAL) = Whether to wrap the tap in circular manner or not.    
+*/
 
 function brainfuck(str = "", { input = "", init = [], size = 256, wrap = false } = {}) {
 	const tape = [...init, ...Array(size - init.length).fill(0)];
