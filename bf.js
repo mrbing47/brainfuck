@@ -52,9 +52,10 @@ class Stack {
     size: Integer (OPTIONAL) = The size of the tape.
     wrap: Boolean (OPTIONAL) = Whether to wrap the tape in circular manner or not.   
 	bytes: Integer (OPTIONAL) (MAX = 53) = The size of each element of the tape.
+	outchar: Boolean (OPTIONAL) = Whether to output all the elements as Characters or Numbers.
 */
 
-function brainfuck(str = "", { input = "", init = [], size = 256, wrap = false, bytes = 1 } = {}) {
+function brainfuck(str = "", { input = "", init = [], size = 256, wrap = false, bytes = 1, outchar = true } = {}) {
 	if (bytes > 53) throw new Error("Integer must have bytes less than " + info(53));
 	const tape = [...init, ...Array(size - init.length).fill(0)];
 	const brackets = new Stack();
@@ -101,7 +102,7 @@ function brainfuck(str = "", { input = "", init = [], size = 256, wrap = false, 
 				else tape[tpointer] = range[1];
 				break;
 			case ".":
-				process.stdout.write(String.fromCharCode(tape[tpointer]));
+				process.stdout.write(outchar ? String.fromCharCode(tape[tpointer]) : tape[tpointer].toString());
 				break;
 			case ",":
 				if (ipointer < input.length) tape[tpointer] = input[ipointer++].charCodeAt(0);
@@ -145,3 +146,8 @@ brainfuck(
 		size: 7,
 	}
 );
+brainfuck("++++++++++++++++++++++++++++++++[>++++++++++++++++++++++++++++++<-]>.", {
+	bytes: 2,
+	outchar: false,
+});
+console.log();
