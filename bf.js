@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const index = chalk.bold.blue;
+const info = chalk.bold.blue;
 const error = chalk.bold.red;
 
 const throwError = (str, ix, message) => {
@@ -7,8 +7,13 @@ const throwError = (str, ix, message) => {
 	const err_length = 3;
 	const err1 = str.substring(ix - err_length, ix);
 	const err2 = str.substring(ix + 1, ix + 1 + err_length);
-	const err_txt = message + "\nAt Index " + index(ix) + " : " + err1 + error(str[ix]) + err2;
+	const err_txt = message + "\nAt Index " + info(ix) + " : " + err1 + error(str[ix]) + err2;
 	throw new Error(err_txt);
+};
+
+const getRange = (bytes) => {
+	const range = Math.pow(2, bytes * 8);
+	return [-Math.floor(range / 2), Math.floor(range / 2) - 1];
 };
 
 class Stack {
@@ -43,14 +48,17 @@ class Stack {
 /*
     str: String = The Brainfuck code.
     input: String (OPTIONAL) = The input for the code to take.
-    init: Array (OPTIONAL) = The value of initial bits of the tap.
+    init: Array (OPTIONAL) = The value of initial bits of the tape.
     size: Integer (OPTIONAL) = The size of the tape.
-    wrap: Boolean (OPTIONAL) = Whether to wrap the tap in circular manner or not.    
+    wrap: Boolean (OPTIONAL) = Whether to wrap the tape in circular manner or not.   
+	bytes: Integer (OPTIONAL) (MAX = 53) = The size of each element of the tape.
 */
 
-function brainfuck(str = "", { input = "", init = [], size = 256, wrap = false } = {}) {
+function brainfuck(str = "", { input = "", init = [], size = 256, wrap = false, bytes = 1 } = {}) {
+	if (bytes > 53) throw new Error("Integer must have bytes less than " + info(53));
 	const tape = [...init, ...Array(size - init.length).fill(0)];
 	const brackets = new Stack();
+	const range = getRange(bytes);
 	let tpointer = 0;
 	let ipointer = 0;
 
@@ -85,12 +93,12 @@ function brainfuck(str = "", { input = "", init = [], size = 256, wrap = false }
 				}
 				break;
 			case "+":
-				if (tape[tpointer] < 127) tape[tpointer]++;
-				else tape[tpointer] = -128;
+				if (tape[tpointer] < range[1]) tape[tpointer]++;
+				else tape[tpointer] = range[0];
 				break;
 			case "-":
-				if (tape[tpointer] > -128) tape[tpointer]--;
-				else tape[tpointer] = 127;
+				if (tape[tpointer] > range[0]) tape[tpointer]--;
+				else tape[tpointer] = range[1];
 				break;
 			case ".":
 				process.stdout.write(String.fromCharCode(tape[tpointer]));
